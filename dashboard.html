@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediVolt - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="logo.jpeg" alt="MediVolt Logo" style="width: 45px; height: 45px; object-fit: contain; border-radius: 8px;">
+            </div>
+            <h2>MediVolt</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="energy">
+                <span class="icon"></span>
+                <span>Energy Prediction</span>
+            </a>
+            <a href="#" class="nav-item" data-page="hvac">
+                <span class="icon"></span>
+                <span>HVAC Optimization</span>
+            </a>
+            <a href="#" class="nav-item" data-page="carbon">
+                <span class="icon"></span>
+                <span>Carbon Forecast</span>
+            </a>
+            <a href="#" class="nav-item" data-page="reports">
+                <span class="icon"></span>
+                <span>Reports</span>
+            </a>
+            <a href="#" class="nav-item" data-page="realtime">
+                <span class="icon"></span>
+                <span>Real-time Monitor</span>
+            </a>
+            <a href="#" class="nav-item" data-page="department">
+                <span class="icon"></span>
+                <span>Department Analysis</span>
+            </a>
+            <a href="#" class="nav-item" data-page="cost">
+                <span class="icon"></span>
+                <span>Cost Analysis</span>
+            </a>
+            <a href="#" class="nav-item" data-page="alerts">
+                <span class="icon"></span>
+                <span>Alert System</span>
+            </a>
+            <a href="#" class="nav-item" data-page="weather">
+                <span class="icon"></span>
+                <span>Weather Impact</span>
+            </a>
+            <a href="admin.html" class="nav-item">
+                <span class="icon"></span>
+                <span>Admin Panel</span>
+            </a>
+            <a href="#" class="nav-item" data-page="settings">
+                <span class="icon"></span>
+                <span>Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="login.html" class="nav-item">
+                <span class="icon"></span>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Energy Dashboard</h1>
+                <p>AI-Powered Energy Optimization for Healthcare</p>
+            </div>
+<div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                </div>
+                <a href="admin.html" class="login-btn" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                    <span class="login-icon"></span>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Dashboard Page -->
+        <div class="page-content active" id="page-dashboard">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-text">
+                    <h2>Welcome Back! 👋</h2>
+                    <p>Here's your hospital's energy performance overview</p>
+                </div>
+                <div class="carbon-indicator">
+                        <div style="margin-top: 16px;">
+                            <canvas id="realtimeChart" height="140"></canvas>
+                        </div>
+                    <div class="carbon-badge">
+                        <span class="carbon-icon">🌱</span>
+                        <div>
+                            <p class="carbon-label">Carbon Score</p>
+                            <p class="carbon-value">A+</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KPI Cards -->
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon energy">⚡</div>
+                    <div class="kpi-info">
+                        <p class="kpi-label">Current Energy Usage</p>
+                        <p class="kpi-value">2,456 <span>kWh</span></p>
+                        <p class="kpi-change positive">↓ 12% vs yesterday</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon prediction">📊</div>
+                    <div class="kpi-info">
+                        <p class="kpi-label">Predicted Consumption</p>
+                        <p class="kpi-value">2,680 <span>kWh</span></p>
+                        <p class="kpi-change">Tomorrow's forecast</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon carbon">🌍</div>
+                    <div class="kpi-info">
+                        <p class="kpi-label">Carbon Emissions</p>
+                        <p class="kpi-value">1.24 <span>tons</span></p>
+                        <p class="kpi-change positive">↓ 8% vs target</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon efficiency">🎯</div>
+                    <div class="kpi-info">
+                        <p class="kpi-label">Efficiency Score</p>
+                        <p class="kpi-value">87<span>%</span></p>
+                        <p class="kpi-change positive">↑ 5% improvement</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-grid">
+                <div class="chart-card">
+                    <h3>Energy Trend (7 Days)</h3>
+                    <div class="chart-container">
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 70%"><span>Mon</span></div>
+                            <div class="bar" style="height: 85%"><span>Tue</span></div>
+                            <div class="bar" style="height: 65%"><span>Wed</span></div>
+                            <div class="bar" style="height: 90%"><span>Thu</span></div>
+                            <div class="bar" style="height: 75%"><span>Fri</span></div>
+                            <div class="bar" style="height: 45%"><span>Sat</span></div>
+                            <div class="bar" style="height: 40%"><span>Sun</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>HVAC Usage Distribution</h3>
+                    <div class="chart-container donut-container">
+                        <div class="donut-chart">
+                            <div class="donut-segment cooling" style="--p:45"></div>
+                            <div class="donut-segment heating" style="--p:30"></div>
+                            <div class="donut-segment ventilation" style="--p:25"></div>
+                        </div>
+                        <div class="legend">
+                            <span class="legend-item"><span class="dot cooling"></span> Cooling 45%</span>
+                            <span class="legend-item"><span class="dot heating"></span> Heating 30%</span>
+                            <span class="legend-item"><span class="dot ventilation"></span> Ventilation 25%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Cards -->
+            <section class="features-section">
+                <h3>AI Features</h3>
+                <div class="features-grid">
+                    <div class="feature-card" data-feature="energy">
+                        <div class="feature-icon">⚡</div>
+                        <h4>Energy Prediction</h4>
+                        <p>Predict future energy consumption using ML models</p>
+                        <button class="feature-btn">Explore</button>
+                    </div>
+                    <div class="feature-card" data-feature="hvac">
+                        <div class="feature-icon">🌡️</div>
+                        <h4>Smart HVAC</h4>
+                        <p>Optimize temperature settings for maximum efficiency</p>
+                        <button class="feature-btn">Explore</button>
+                    </div>
+                    <div class="feature-card" data-feature="carbon">
+                        <div class="feature-icon">🌍</div>
+                        <h4>Carbon Forecast</h4>
+                        <p>Forecast and reduce your carbon footprint</p>
+                        <button class="feature-btn">Explore</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Energy Prediction Page -->
+        <div class="page-content" id="page-energy">
+            <section class="page-header">
+                <h2>Energy Consumption Prediction</h2>
+                <p>AI-powered energy forecasting using Machine Learning</p>
+            </section>
+            
+            <div class="prediction-grid">
+                <div class="input-card">
+                    <h3>Input Parameters</h3>
+                    <form id="energyForm">
+                        <div class="form-group">
+                            <label>Number of Beds</label>
+                            <input type="number" placeholder="200" id="numBeds">
+                        </div>
+                        <div class="form-group">
+                            <label>Equipment Usage (hours/day)</label>
+                            <input type="number" placeholder="18" id="equipHours">
+                        </div>
+                        <div class="form-group">
+                            <label>Outdoor Temperature (°C)</label>
+                            <input type="number" placeholder="25" id="outdoorTemp">
+                        </div>
+                        <div class="form-group">
+                            <label>Historical Average (kWh)</label>
+                            <input type="number" placeholder="2200" id="historicalAvg">
+                        </div>
+                        <button type="submit" class="predict-btn">🔮 Predict Energy Usage</button>
+                    </form>
+                </div>
+                <div class="result-card">
+                    <h3>Prediction Results</h3>
+                    <div class="prediction-result">
+                        <div class="result-value">
+                            <span class="result-number">2,547</span>
+                            <span class="result-unit">kWh</span>
+                        </div>
+                        <p class="result-label">Predicted Daily Consumption</p>
+                    </div>
+                    
+                    <!-- Risk Level Indicator -->
+                    <div class="risk-indicator" id="energyRisk">
+                        <div class="risk-header">
+                            <span class="risk-label">Risk Level</span>
+                            <span class="risk-badge low">LOW</span>
+                        </div>
+                        <div class="risk-bar">
+                            <div class="risk-fill" style="width: 30%"></div>
+                        </div>
+                        <p class="risk-description">Energy consumption is within acceptable range</p>
+                    </div>
+                    
+                    <!-- Graphical Analysis -->
+                    <div class="analysis-section">
+                        <h4>📊 Consumption Analysis</h4>
+                        <div class="mini-chart">
+                            <div class="chart-row">
+                                <span class="chart-label">Low Estimate</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar low-bar" style="width: 60%"></div>
+                                </div>
+                                <span class="chart-value" id="energyLow">1,832</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">Average</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar avg-bar" style="width: 75%"></div>
+                                </div>
+                                <span class="chart-value" id="energyAvg">2,280</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">High Estimate</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar high-bar" style="width: 90%"></div>
+                                </div>
+                                <span class="chart-value" id="energyHigh">2,728</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <canvas id="energyChart" height="140"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Outcome Prediction -->
+                    <div class="outcome-section">
+                        <h4>🎯 Predicted Outcome (7 Days)</h4>
+                        <div class="outcome-chart">
+                            <canvas id="energyTrendChart" height="140"></canvas>
+                        </div>
+                        <div class="outcome-summary">
+                            <div class="outcome-item">
+                                <span class="outcome-value" id="weeklyTotal">17,829</span>
+                                <span class="outcome-label">kWh/Week</span>
+                            </div>
+                            <div class="outcome-item">
+                                <span class="outcome-value" id="dailyAvg">2,547</span>
+                                <span class="outcome-label">kWh/Day Avg</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="optimization-suggestions">
+                        <h4>💡 Optimization Suggestions</h4>
+                        <ul id="energySuggestions">
+                            <li>Reduce HVAC idle time by 2 hours during night</li>
+                            <li>Install smart sensors in operating rooms</li>
+                            <li>Schedule equipment maintenance next week</li>
+                        </ul>
+                    </div>
+                    <div class="model-info">
+                        <p><strong>Model:</strong> Random Forest Regressor</p>
+                        <p><strong>Accuracy:</strong> 94.2%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HVAC Optimization Page -->
+        <div class="page-content" id="page-hvac">
+            <section class="page-header">
+                <h2>Smart HVAC Optimization</h2>
+                <p>AI-driven temperature optimization for energy savings</p>
+            </section>
+            
+            <div class="hvac-grid">
+                <div class="input-card">
+                    <h3>Current Settings</h3>
+                    <form id="hvacForm">
+                        <div class="form-group">
+                            <label>Current Temperature (°C)</label>
+                            <input type="number" placeholder="22" id="currentTemp">
+                        </div>
+                        <div class="form-group">
+                            <label>Occupancy Level</label>
+                            <select id="occupancy">
+                                <option>Low (0-20%)</option>
+                                <option selected>Medium (20-60%)</option>
+                                <option>High (60-100%)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Time of Day</label>
+                            <select id="timeOfDay">
+                                <option>Morning (6AM-12PM)</option>
+                                <option selected>Afternoon (12PM-6PM)</option>
+                                <option>Evening (6PM-10PM)</option>
+                                <option>Night (10PM-6AM)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Weather Condition</label>
+                            <select id="weather">
+                                <option>Sunny</option>
+                                <option selected>Cloudy</option>
+                                <option>Rainy</option>
+                                <option>Humid</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="optimize-btn">🌡️ Optimize Settings</button>
+                    </form>
+                </div>
+                <div class="result-card">
+                    <h3>Recommended Settings</h3>
+                    <div class="hvac-result">
+                        <div class="temp-display">
+                            <span class="temp-value">21</span>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                        <p class="result-label">Recommended Temperature</p>
+                    </div>
+                    
+                    <!-- Risk Level Indicator -->
+                    <div class="risk-indicator" id="hvacRisk">
+                        <div class="risk-header">
+                            <span class="risk-label">Comfort Level</span>
+                            <span class="risk-badge medium">OPTIMAL</span>
+                        </div>
+                        <div class="risk-bar">
+                            <div class="risk-fill" style="width: 60%"></div>
+                        </div>
+                        <p class="risk-description">Temperature settings are within comfort zone</p>
+                    </div>
+                    
+                    <!-- Graphical Analysis -->
+                    <div class="analysis-section">
+                        <h4>📊 Efficiency Analysis</h4>
+                        <div class="mini-chart">
+                            <div class="chart-row">
+                                <span class="chart-label">Current Usage</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar high-bar" style="width: 85%"></div>
+                                </div>
+                                <span class="chart-value" id="hvacCurrentUsage">85%</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">Optimized</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar avg-bar" style="width: 55%"></div>
+                                </div>
+                                <span class="chart-value" id="hvacOptimized">55%</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">Potential</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar low-bar" style="width: 35%"></div>
+                                </div>
+                                <span class="chart-value" id="hvacPotential">35%</span>
+                            </div>
+                        </div>
+                        <div style="margin-top:16px;">
+                            <canvas id="hvacChart" height="140"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Outcome Prediction -->
+                    <div class="outcome-section">
+                        <h4>🎯 Monthly Outcome Prediction</h4>
+                        <div class="outcome-chart">
+                            <canvas id="hvacTrendChart" height="140"></canvas>
+                        </div>
+                        <div class="outcome-summary">
+                            <div class="outcome-item">
+                                <span class="outcome-value" id="hvacMonthlySavings">$340</span>
+                                <span class="outcome-label">Monthly Savings</span>
+                            </div>
+                            <div class="outcome-item">
+                                <span class="outcome-value" id="hvacEnergySaved">1,240</span>
+                                <span class="outcome-label">kWh Saved</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="savings-display">
+                        <div class="savings-item">
+                            <span class="savings-value">18.5%</span>
+                            <span class="savings-label">Energy Savings</span>
+                        </div>
+                        <div class="savings-item">
+                            <span class="savings-value">$340</span>
+                            <span class="savings-label">Monthly Savings</span>
+                        </div>
+                    </div>
+                    <div class="model-info">
+                        <p><strong>Model:</strong> Decision Tree Classifier</p>
+                        <p><strong>Based on:</strong> 10,000+ hospital data points</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carbon Forecast Page -->
+        <div class="page-content" id="page-carbon">
+            <section class="page-header">
+                <h2>Carbon Emission Forecasting</h2>
+                <p>Predict and reduce your hospital's carbon footprint</p>
+            </section>
+            
+            <div class="carbon-grid">
+                <div class="input-card">
+                    <h3>Input Parameters</h3>
+                    <form id="carbonForm">
+                        <div class="form-group">
+                            <label>Energy Consumption (kWh)</label>
+                            <input type="number" placeholder="2500" id="energyConsumption">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Energy Source</label>
+                            <select id="energySource">
+                                <option>Mixed Grid</option>
+                                <option selected>Grid + Solar</option>
+                                <option>Coal-based</option>
+                                <option>Renewable 100%</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="forecast-btn">🌍 Calculate Emissions</button>
+                    </form>
+                </div>
+                <div class="result-card">
+                    <h3>Emission Forecast</h3>
+                    <div class="emission-result">
+                        <div class="emission-display">
+                            <span class="emission-value">1.18</span>
+                            <span class="emission-unit">tons CO₂</span>
+                        </div>
+                        <p class="result-label">Daily Carbon Emissions</p>
+                    </div>
+                    
+                    <!-- Risk Level Indicator -->
+                    <div class="risk-indicator" id="carbonRisk">
+                        <div class="risk-header">
+                            <span class="risk-label">Emission Level</span>
+                            <span class="risk-badge medium">MODERATE</span>
+                        </div>
+                        <div class="risk-bar">
+                            <div class="risk-fill" style="width: 55%"></div>
+                        </div>
+                        <p class="risk-description">Emissions are within acceptable limits but can be improved</p>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <canvas id="carbonChart" height="140"></canvas>
+                    </div>
+                    
+                    <!-- Graphical Analysis -->
+                    <div class="analysis-section">
+                        <h4>📊 Emission Analysis</h4>
+                        <div class="mini-chart">
+                            <div class="chart-row">
+                                <span class="chart-label">Low Estimate</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar low-bar" style="width: 35%"></div>
+                                </div>
+                                <span class="chart-value" id="carbonLow">0.71</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">Average</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar avg-bar" style="width: 55%"></div>
+                                </div>
+                                <span class="chart-value" id="carbonAvg">1.18</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">High Estimate</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar high-bar" style="width: 85%"></div>
+                                </div>
+                                <span class="chart-value" id="carbonHigh">1.65</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Outcome Prediction -->
+                    <div class="outcome-section">
+                        <h4>🎯 Monthly Outcome Prediction</h4>
+                        <div class="outcome-chart">
+                            <div class="outcome-bar" style="height: 75%"><span>Week 1</span></div>
+                            <div class="outcome-bar" style="height: 70%"><span>Week 2</span></div>
+                            <div class="outcome-bar" style="height: 65%"><span>Week 3</span></div>
+                            <div class="outcome-bar" style="height: 60%"><span>Week 4</span></div>
+                        </div>
+                        <div class="outcome-summary">
+                            <div class="outcome-item">
+                                <span class="outcome-value" id="carbonMonthly">35.4</span>
+                                <span class="outcome-label">tons CO₂/Month</span>
+                            </div>
+                            <div class="outcome-item">
+                                <span class="outcome-value" id="carbonReduction">30%</span>
+                                <span class="outcome-label">Target Reduction</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-chart">
+                        <div class="comparison-bar current">
+                            <span>Current</span>
+                            <div class="bar-fill" style="width: 70%"></div>
+                        </div>
+                        <div class="comparison-bar target">
+                            <span>Target</span>
+                            <div class="bar-fill" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div class="reduction-suggestions">
+                        <h4>📉 Reduction Suggestions</h4>
+                        <ul id="carbonSuggestions">
+                            <li>Switch to solar power for 30% of usage</li>
+                            <li>Upgrade to LED lighting (saves 40%)</li>
+                            <li>Implement smart HVAC scheduling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Monitor Page -->
+        <div class="page-content" id="page-realtime">
+            <section class="page-header">
+                <h2>Real-time Energy Monitoring</h2>
+                <p>Live power consumption tracking with instant analytics</p>
+            </section>
+            <div class="realtime-grid">
+                <div class="input-card">
+                    <h3>Live Power Metrics</h3>
+                    <div class="monitoring-stats">
+                        <div class="monitor-stat">
+                            <span class="monitor-label">Current Power</span>
+                            <span class="monitor-value" id="currentPower">142 kW</span>
+                        </div>
+                        <div class="monitor-stat">
+                            <span class="monitor-label">Voltage</span>
+                            <span class="monitor-value">230 V</span>
+                        </div>
+                        <div class="monitor-stat">
+                            <span class="monitor-label">Current</span>
+                            <span class="monitor-value">42 A</span>
+                        </div>
+                        <div class="monitor-stat">
+                            <span class="monitor-label">Power Factor</span>
+                            <span class="monitor-value">0.92</span>
+                        </div>
+                        <div class="monitor-stat">
+                            <span class="monitor-label">Frequency</span>
+                            <span class="monitor-value">50 Hz</span>
+                        </div>
+                    </div>
+                    <button class="refresh-btn" onclick="updateRealTime()">Refresh Data</button>
+                </div>
+                <div class="result-card">
+                    <h3>Live Statistics</h3>
+                    <div class="live-stats-display">
+                        <div class="live-stat-item">
+                            <span class="live-stat-value" id="todayKwh">3,456</span>
+                            <span class="live-stat-label">kWh Today</span>
+                        </div>
+                        <div class="live-stat-item">
+                            <span class="live-stat-value" id="peakPower">168</span>
+                            <span class="live-stat-label">kW Peak</span>
+                        </div>
+                    </div>
+                    <div class="risk-indicator">
+                        <div class="risk-header">
+                            <span class="risk-label">Load Status</span>
+                            <span class="risk-badge medium" id="loadStatus">NORMAL</span>
+                        </div>
+                        <div class="risk-bar"><div class="risk-fill" style="width: 65%" id="loadBar"></div></div>
+                        <p class="risk-description" id="loadDesc">Power consumption within normal range</p>
+                    </div>
+                    <div class="analysis-section">
+                        <h4>Power Analysis</h4>
+                        <div class="mini-chart">
+                            <div class="chart-row">
+                                <span class="chart-label">Morning Peak</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar high-bar" style="width: 75%"></div>
+                                </div>
+                                <span class="chart-value">156 kW</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">Afternoon</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar avg-bar" style="width: 65%"></div>
+                                </div>
+                                <span class="chart-value">142 kW</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="chart-label">Evening</span>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar high-bar" style="width: 80%"></div>
+                                </div>
+                                <span class="chart-value">168 kW</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outcome-section">
+                        <h4>Hourly Prediction</h4>
+                        <div class="outcome-chart">
+                            <div class="outcome-bar" style="height: 65%"><span>6AM</span></div>
+                            <div class="outcome-bar" style="height: 75%"><span>8AM</span></div>
+                            <div class="outcome-bar" style="height: 85%"><span>10AM</span></div>
+                            <div class="outcome-bar" style="height: 70%"><span>12PM</span></div>
+                            <div class="outcome-bar" style="height: 65%"><span>2PM</span></div>
+                            <div class="outcome-bar" style="height: 80%"><span>4PM</span></div>
+                        </div>
+                        <div class="outcome-summary">
+                            <div class="outcome-item">
+                                <span class="outcome-value">12,450</span>
+                                <span class="outcome-label">kWh Projected</span>
+                            </div>
+                            <div class="outcome-item">
+                                <span class="outcome-value">$1,494</span>
+                                <span class="outcome-label">Est. Cost</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Department Analysis Page -->
+        <div class="page-content" id="page-department">
+            <section class="page-header">
+                <h2>Department Energy Analysis</h2>
+                <p>Breakdown by department</p>
+            </section>
+            <div class="department-grid">
+                <div class="input-card">
+                    <h3>Department Parameters</h3>
+                    <form id="deptForm">
+                        <div class="form-group"><label>Select Department</label><select id="deptSelect"><option>ICU</option><option>Operating Rooms</option><option>Laboratories</option><option>Patient Wards</option></select></div>
+                        <div class="form-group"><label>Number of Units</label><input type="number" placeholder="20" id="deptUnits"></div>
+                        <button type="submit" class="predict-btn">Analyze Department</button>
+                    </form>
+                </div>
+                <div class="result-card">
+                    <h3>Analysis Results</h3>
+                    <div class="result-value"><span class="result-number" id="deptConsumption">892</span><span class="result-unit">kWh/day</span></div>
+                    <div class="risk-indicator">
+                        <div class="risk-header"><span class="risk-label">Efficiency</span><span class="risk-badge low" id="deptRating">GOOD</span></div>
+                        <div class="risk-bar"><div class="risk-fill" style="width: 72%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Analysis Page -->
+        <div class="page-content" id="page-cost">
+            <section class="page-header">
+                <h2>Cost Analysis</h2>
+                <p>Financial tracking</p>
+            </section>
+            <div class="cost-grid">
+                <div class="input-card">
+                    <h3>Cost Parameters</h3>
+                    <form id="costForm">
+                        <div class="form-group"><label>Monthly Budget ($)</label><input type="number" placeholder="25000" id="monthlyBudget"></div>
+                        <div class="form-group"><label>Current Spend ($)</label><input type="number" placeholder="18200" id="currentSpend"></div>
+                        <button type="submit" class="predict-btn">Calculate</button>
+                    </form>
+                </div>
+                <div class="result-card">
+                    <h3>Cost Results</h3>
+                    <div class="result-value"><span class="result-number" id="budgetUsage">74.2</span><span class="result-unit">%</span></div>
+                    <div class="risk-indicator">
+                        <div class="risk-header"><span class="risk-label">Budget Status</span><span class="risk-badge low" id="budgetStatus">UNDER</span></div>
+                        <div class="risk-bar"><div class="risk-fill" style="width: 74%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert System Page -->
+        <div class="page-content" id="page-alerts">
+            <section class="page-header">
+                <h2>Alert System</h2>
+                <p>Threshold configuration</p>
+            </section>
+            <div class="alert-grid">
+                <div class="input-card">
+                    <h3>Configure Alerts</h3>
+                    <form id="alertForm">
+                        <div class="form-group"><label>Energy Alert (kWh)</label><input type="number" placeholder="3000" id="energyThreshold"></div>
+                        <div class="form-group"><label>Carbon Limit</label><input type="number" placeholder="2.0" id="carbonThreshold" step="0.1"></div>
+                        <button type="submit" class="predict-btn">Save Alerts</button>
+                    </form>
+                </div>
+                <div class="result-card">
+                    <h3>Active Alerts</h3>
+                    <div class="alert-item warning"><span>High Energy Usage</span><p>ICU exceeded 85% limit</p></div>
+                    <div class="alert-item info"><span>Report Ready</span><p>Week 12 available</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather Impact Page -->
+        <div class="page-content" id="page-weather">
+            <section class="page-header">
+                <h2>Weather Impact</h2>
+                <p>Weather-based predictions</p>
+            </section>
+            <div class="weather-grid">
+                <div class="input-card">
+                    <h3>Weather Parameters</h3>
+                    <form id="weatherForm">
+                        <div class="form-group"><label>Temperature (°C)</label><input type="number" placeholder="28" id="weatherTemp"></div>
+                        <div class="form-group"><label>Humidity (%)</label><input type="number" placeholder="65" id="weatherHumidity"></div>
+                        <button type="submit" class="predict-btn">Analyze Impact</button>
+                    </form>
+                </div>
+                <div class="result-card">
+                    <h3>Weather Impact</h3>
+                    <div class="result-value"><span class="result-number" id="weatherImpact">+18</span><span class="result-unit">%</span></div>
+                    <div class="risk-indicator">
+                        <div class="risk-header"><span class="risk-label">Impact Level</span><span class="risk-badge medium" id="weatherRisk">MODERATE</span></div>
+                        <div class="risk-bar"><div class="risk-fill" style="width: 55%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div class="page-content" id="page-reports">
+            <section class="page-header">
+                <h2>Reports & Analytics</h2>
+                <p>Comprehensive energy and carbon reports</p>
+            </section>
+            
+            <div class="reports-grid">
+                <div class="report-card">
+                    <div class="report-icon">📊</div>
+                    <h4>Monthly Energy Report</h4>
+                    <p>Detailed breakdown of energy consumption</p>
+                    <button class="download-btn">Download PDF</button>
+                </div>
+                <div class="report-card">
+                    <div class="report-icon">🌍</div>
+                    <h4>Carbon Footprint Report</h4>
+                    <p>Monthly carbon emissions analysis</p>
+                    <button class="download-btn">Download PDF</button>
+                </div>
+                <div class="report-card">
+                    <div class="report-icon">💰</div>
+                    <h4>Cost Savings Report</h4>
+                    <p>Financial impact of optimizations</p>
+                    <button class="download-btn">Download PDF</button>
+                </div>
+                <div class="report-card">
+                    <div class="report-icon">🎯</div>
+                    <h4>Efficiency Audit</h4>
+                    <p>System performance evaluation</p>
+                    <button class="download-btn">Download PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div class="page-content" id="page-settings">
+            <section class="page-header">
+                <h2>Settings</h2>
+                <p>Configure your preferences</p>
+            </section>
+            
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>Profile Settings</h3>
+                    <div class="form-group">
+                        <label>Hospital Name</label>
+                        <input type="text" value="City General Hospital">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="admin@hospital.com">
+                    </div>
+                    <button class="save-btn">Save Changes</button>
+                </div>
+                <div class="settings-card">
+                    <h3>Notifications</h3>
+                    <div class="toggle-item">
+                        <span>Email Alerts</span>
+                        <input type="checkbox" checked>
+                    </div>
+                    <div class="toggle-item">
+                        <span>Weekly Reports</span>
+                        <input type="checkbox" checked>
+                    </div>
+                    <div class="toggle-item">
+                        <span>Energy Alerts</span>
+                        <input type="checkbox">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

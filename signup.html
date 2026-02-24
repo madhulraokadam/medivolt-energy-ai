@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediVolt - Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="card-header">
+                <div class="logo">
+                    <img src="logo.jpeg" alt="MediVolt Logo" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px;">
+                </div>
+                <h1>MediVolt</h1>
+                <p>Create Your Account</p>
+            </div>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="admin@hospital.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+1 (555) 123-4567" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password (min 6 characters)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+                </div>
+                
+                <button type="submit" id="signupBtn">Create Account</button>
+            </form>
+
+            <div id="successMessage" style="display: none; text-align: center; color: #10b981;">
+                <p style="font-size: 18px; margin: 20px 0;">✓ Account Created Successfully!</p>
+                <p>Redirecting to login...</p>
+            </div>
+            
+            <div class="card-footer">
+                <p>Already have an account? <a href="login.html" style="color: #0F766E; text-decoration: none; font-weight: 600;">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signupForm');
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const signupBtn = document.getElementById('signupBtn');
+            const successMessage = document.getElementById('successMessage');
+
+            function showError(input, message) {
+                const formGroup = input.parentElement;
+                formGroup.classList.add('has-error');
+                input.classList.add('error');
+                
+                let errorEl = formGroup.querySelector('.error-message');
+                if (!errorEl) {
+                    errorEl = document.createElement('div');
+                    errorEl.className = 'error-message';
+                    formGroup.appendChild(errorEl);
+                }
+                errorEl.textContent = message;
+            }
+
+            function clearError(input) {
+                const formGroup = input.parentElement;
+                formGroup.classList.remove('has-error');
+                input.classList.remove('error');
+            }
+
+            function validateEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function validate() {
+                let valid = true;
+                
+                [username, email, phone, password, confirmPassword].forEach(input => clearError(input));
+
+                if (!username.value || username.value.length < 3) {
+                    showError(username, 'Username must be at least 3 characters');
+                    valid = false;
+                }
+
+                if (!email.value || !validateEmail(email.value)) {
+                    showError(email, 'Please enter a valid email address');
+                    valid = false;
+                }
+
+                if (!phone.value) {
+                    showError(phone, 'Phone number is required');
+                    valid = false;
+                }
+
+                if (!password.value || password.value.length < 6) {
+                    showError(password, 'Password must be at least 6 characters');
+                    valid = false;
+                }
+
+                if (password.value !== confirmPassword.value) {
+                    showError(confirmPassword, 'Passwords do not match');
+                    valid = false;
+                }
+
+                return valid;
+            }
+
+            // Real-time validation
+            [username, email, phone, password, confirmPassword].forEach(input => {
+                input.addEventListener('input', () => clearError(input));
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!validate()) return;
+
+                signupBtn.textContent = 'Creating Account...';
+                signupBtn.disabled = true;
+
+                const signupData = {
+                    username: username.value,
+                    email: email.value,
+                    password: password.value,
+                    phone: phone.value
+                };
+
+                const apiUrl = window.location.origin + '/api/register';
+                console.log('Attempting signup with:', signupData);
+
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(signupData)
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Signup response:', data);
+                    if (data.success) {
+                        // Show success message
+                        form.style.display = 'none';
+                        successMessage.style.display = 'block';
+                        
+                        // Redirect to login after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                    } else {
+                        showError(username, data.message || 'Signup failed. Username might already exist.');
+                        signupBtn.textContent = 'Create Account';
+                        signupBtn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Signup error:', error.message);
+                    showError(username, 'Server error: ' + error.message);
+                    signupBtn.textContent = 'Create Account';
+                    signupBtn.disabled = false;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

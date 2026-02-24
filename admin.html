@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediVolt - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Admin Page Specific Styles */
+        .admin-container {
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 18px;
+            display: block;
+            text-align: center;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .admin-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            color: var(--text);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .admin-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .admin-btn.secondary {
+            background: var(--white);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Stats Cards */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card .stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-card .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* Admin Grid */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .admin-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .admin-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 16px;
+            display: block;
+            text-align: left;
+        }
+
+        /* Hospital Info Form */
+        .hospital-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .hospital-info .form-group {
+            margin-bottom: 16px;
+        }
+
+        .hospital-info .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* User Management Table */
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-table th {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .user-table td {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .user-table tr:hover {
+            background: var(--bg);
+        }
+
+        .user-avatar-small {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .role-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .role-badge.admin {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .role-badge.manager {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .role-badge.staff {
+            background: #DBEAFE;
+            color: #2563EB;
+        }
+
+        .role-badge.operator {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        .status-badge.inactive {
+            background: #F1F5F9;
+            color: #64748B;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn.edit {
+            background: #DBEAFE;
+            color: #2563EB;
+        }
+
+        .action-btn.delete {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Access Control */
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .access-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 10px;
+        }
+
+        .access-item .access-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .access-item .access-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .access-toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+
+        .access-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .access-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .access-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .access-toggle input:checked + .access-slider {
+            background-color: var(--primary);
+        }
+
+        .access-toggle input:checked + .access-slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Activity Log */
+        .activity-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.login { background: #D1FAE5; }
+        .activity-icon.logout { background: #FEE2E2; }
+        .activity-icon.settings { background: #DBEAFE; }
+        .activity-icon.report { background: #FEF3C7; }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content .activity-title {
+            font-weight: 500;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .activity-content .activity-time {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* System Settings */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 10px;
+        }
+
+        .settings-item .settings-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-item .settings-label {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .settings-item .settings-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            color: var(--text);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1001;
+        }
+
+        .notification.show {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            border-left: 4px solid #059669;
+        }
+
+        .notification.error {
+            border-left: 4px solid #DC2626;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            .hospital-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-stats {
+                grid-template-columns: 1fr;
+            }
+            .access-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="logo.jpeg" alt="MediVolt Logo" style="width: 50px; height: 50px; object-fit: contain;">
+            </div>
+            <h2>MediVolt</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <span class="icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <span class="icon">⚙️</span>
+                <span>Admin Panel</span>
+            </a>
+            <a href="#" class="nav-item" data-page="settings">
+                <span class="icon">🔐</span>
+                <span>Access Control</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="login.html" class="nav-item">
+                <span class="icon">🚪</span>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="admin-container">
+            <!-- Header -->
+            <div class="admin-header">
+                <div>
+                    <h2>Admin Panel</h2>
+                    <p style="color: var(--text-light); margin-top: 4px;">Manage hospital settings, users, and access control</p>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-btn secondary" onclick="exportData()">
+                        Export Data
+                    </button>
+                    <button class="admin-btn primary" onclick="openModal('addUserModal')">
+                        Add User
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #D1FAE5;"></div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #DBEAFE;"></div>
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FEF3C7;"></div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Hospital Branch</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #F3E8FF;"></div>
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Departments</div>
+                </div>
+            </div>
+
+            <!-- Admin Grid -->
+            <div class="admin-grid">
+                <!-- Hospital Information -->
+                <div class="admin-card full-width">
+                    <h3>🏥 Hospital Information</h3>
+                    <div class="hospital-info">
+                        <div class="form-group">
+                            <label>Hospital Name</label>
+                            <input type="text" id="hospitalName" value="City General Hospital" placeholder="Enter hospital name">
+                        </div>
+                        <div class="form-group">
+                            <label>Hospital ID</label>
+                            <input type="text" id="hospitalId" value="HOS-001234" placeholder="Enter hospital ID" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" id="hospitalAddress" value="123 Medical Center Drive, Healthcare City" placeholder="Enter address">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="hospitalPhone" value="+1 (555) 123-4567" placeholder="Enter phone">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="hospitalEmail" value="admin@citygeneral.com" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label>License Number</label>
+                            <input type="text" id="hospitalLicense" value="MED-2024-001234" placeholder="Enter license number">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Beds Capacity</label>
+                            <input type="number" id="hospitalBeds" value="500" placeholder="Enter bed capacity">
+                        </div>
+                        <div class="form-group">
+                            <label>Established Year</label>
+                            <input type="number" id="hospitalYear" value="1995" placeholder="Enter year">
+                        </div>
+                        <div class="form-group full-width">
+                            <button class="admin-btn primary" onclick="saveHospitalInfo()" style="width: auto; padding: 12px 32px;">
+                                💾 Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Management -->
+                <div class="admin-card full-width">
+                        <h3>User Management</h3>
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Last Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <tr>
+                                <td>
+                                    <span class="user-avatar-small">AD</span>
+                                    Admin User
+                                </td>
+                                <td><span class="role-badge admin">Admin</span></td>
+                                <td>Management</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>Just now</td>
+                                <td>
+                                    <button class="action-btn edit" onclick="editUser(1)">Edit</button>
+                                    <button class="action-btn delete" onclick="deleteUser(1)">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="user-avatar-small">JM</span>
+                                    John Manager
+                                </td>
+                                <td><span class="role-badge manager">Manager</span></td>
+                                <td>Energy</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>2 hours ago</td>
+                                <td>
+                                    <button class="action-btn edit" onclick="editUser(2)">Edit</button>
+                                    <button class="action-btn delete" onclick="deleteUser(2)">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="user-avatar-small">SO</span>
+                                    Sarah Operator
+                                </td>
+                                <td><span class="role-badge operator">Operator</span></td>
+                                <td>HVAC</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>1 day ago</td>
+                                <td>
+                                    <button class="action-btn edit" onclick="editUser(3)">Edit</button>
+                                    <button class="action-btn delete" onclick="deleteUser(3)">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="user-avatar-small">MT</span>
+                                    Mike Technician
+                                </td>
+                                <td><span class="role-badge staff">Staff</span></td>
+                                <td>Maintenance</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>3 hours ago</td>
+                                <td>
+                                    <button class="action-btn edit" onclick="editUser(4)">Edit</button>
+                                    <button class="action-btn delete" onclick="deleteUser(4)">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="user-avatar-small">EW</span>
+                                    Emma Wilson
+                                </td>
+                                <td><span class="role-badge staff">Staff</span></td>
+                                <td>Laboratories</td>
+                                <td><span class="status-badge inactive">Inactive</span></td>
+                                <td>5 days ago</td>
+                                <td>
+                                    <button class="action-btn edit" onclick="editUser(5)">Edit</button>
+                                    <button class="action-btn delete" onclick="deleteUser(5)">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Access Control -->
+                <div class="admin-card">
+                    <h3>Access Control</h3>
+                    <div class="access-grid">
+                        <div class="access-item">
+                            <div class="access-info">
+                                <div class="access-icon">⚡</div>
+                                <div>
+                                    <div style="font-weight: 500;">Energy Prediction</div>
+                                    <div style="font-size: 12px; color: var(--text-light);">Manage predictions</div>
+                                </div>
+                            </div>
+                            <label class="access-toggle">
+                                <input type="checkbox" checked>
+                                <span class="access-slider"></span>
+                            </label>
+                        </div>
+                        <div class="access-item">
+                            <div class="access-info">
+                                <div class="access-icon">🌡️</div>
+                                <div>
+                                    <div style="font-weight: 500;">HVAC Control</div>
+                                    <div style="font-size: 12px; color: var(--text-light);">Temperature settings</div>
+                                </div>
+                            </div>
+                            <label class="access-toggle">
+                                <input type="checkbox" checked>
+                                <span class="access-slider"></span>
+                            </label>
+                        </div>
+                        <div class="access-item">
+                            <div class="access-info">
+                                <div class="access-icon">🌍</div>
+                                <div>
+                                    <div style="font-weight: 500;">Carbon Reports</div>
+                                    <div style="font-size: 12px; color: var(--text-light);">View emissions</div>
+                                </div>
+                            </div>
+                            <label class="access-toggle">
+                                <input type="checkbox" checked>
+                                <span class="access-slider"></span>
+                            </label>
+                        </div>
+                        <div class="access-item">
+                            <div class="access-info">
+                                <div class="access-icon">💰</div>
+                                <div>
+                                    <div style="font-weight: 500;">Cost Analysis</div>
+                                    <div style="font-size: 12px; color: var(--text-light);">Financial data</div>
+                                </div>
+                            </div>
+                            <label class="access-toggle">
+                                <input type="checkbox">
+                                <span class="access-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="admin-card">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon login">🔔</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Admin logged in</div>
+                                <div class="activity-time">Just now</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon settings">⚙️</div>
+                            <div class="activity-content">
+                                <div class="activity-title">HVAC settings updated by John Manager</div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon report">📊</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Monthly report generated</div>
+                                <div class="activity-time">5 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon login">👤</div>
+                            <div class="activity-content">
+                                <div class="activity-title">New user added: Mike Technician</div>
+                                <div class="activity-time">1 day ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon logout">🔒</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Sarah Operator logged out</div>
+                                <div class="activity-time">2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings -->
+                <div class="admin-card full-width">
+                    <h3>🔧 System Settings</h3>
+                    <div class="settings-list">
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Two-Factor Authentication</div>
+                                <div class="settings-desc">Require 2FA for all admin users</div>
+                            </div>
+                            <label class="access-toggle">
+                                <input type="checkbox" checked>
+                                <span class="access-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Session Timeout</div>
+                                <div class="settings-desc">Auto logout after 30 minutes of inactivity</div>
+                            </div>
+                            <select style="padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;">
+                                <option>15 minutes</option>
+                                <option selected>30 minutes</option>
+                                <option>1 hour</option>
+                            </select>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Email Notifications</div>
+                                <div class="settings-desc">Send email alerts for critical events</div>
+                            </div>
+                            <label class="access-toggle">
+                                <input type="checkbox" checked>
+                                <span class="access-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Audit Logging</div>
+                                <div class="settings-desc">Track all user actions for compliance</div>
+                            </div>
+                            <label class="access-toggle">
+                                <input type="checkbox" checked>
+                                <span class="access-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Add New User</h3>
+                <button class="modal-close" onclick="closeModal('addUserModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="newUserName" placeholder="Enter full name" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px;">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="newUserEmail" placeholder="Enter email" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px;">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select id="newUserRole" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px;">
+                    <option value="admin">Admin</option>
+                    <option value="manager">Manager</option>
+                    <option value="staff">Staff</option>
+                    <option value="operator">Operator</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Department</label>
+                <select id="newUserDept" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px;">
+                    <option>Management</option>
+                    <option>Energy</option>
+                    <option>HVAC</option>
+                    <option>Maintenance</option>
+                    <option>Laboratories</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="admin-btn secondary" onclick="closeModal('addUserModal')">Cancel</button>
+                <button class="admin-btn primary" onclick="addNewUser()">Add User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit User</h3>
+                <button class="modal-close" onclick="closeModal('editUserModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="editUserName" placeholder="Username" style="width:100%; padding:12px; border:2px solid var(--border); border-radius:8px;" readonly>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editUserEmail" placeholder="Email" style="width:100%; padding:12px; border:2px solid var(--border); border-radius:8px;">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select id="editUserRole" style="width:100%; padding:12px; border:2px solid var(--border); border-radius:8px;">
+                    <option value="admin">Admin</option>
+                    <option value="manager">Manager</option>
+                    <option value="staff">Staff</option>
+                    <option value="operator">Operator</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="editUserStatus" style="width:100%; padding:12px; border:2px solid var(--border); border-radius:8px;">
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="admin-btn secondary" onclick="closeModal('editUserModal')">Cancel</button>
+                <button class="admin-btn primary" onclick="submitEditUser()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span id="notificationIcon">✅</span>
+        <span id="notificationMessage">Success!</span>
+    </div>
+
+    <script>
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Notification Function
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notificationIcon');
+            
+            notification.className = 'notification ' + type;
+            icon.textContent = type === 'success' ? '✅' : '❌';
+            document.getElementById('notificationMessage').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Save Hospital Info
+        function saveHospitalInfo() {
+            const hospitalData = {
+                name: document.getElementById('hospitalName').value,
+                id: document.getElementById('hospitalId').value,
+                address: document.getElementById('hospitalAddress').value,
+                phone: document.getElementById('hospitalPhone').value,
+                email: document.getElementById('hospitalEmail').value,
+                license: document.getElementById('hospitalLicense').value,
+                beds: document.getElementById('hospitalBeds').value,
+                year: document.getElementById('hospitalYear').value
+            };
+            
+            console.log('Saving hospital info:', hospitalData);
+            showNotification('Hospital information saved successfully!', 'success');
+        }
+
+        // User Management Functions
+        function editUser(userId) {
+            showNotification('Opening user edit for ID: ' + userId, 'success');
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                showNotification('User deleted successfully!', 'success');
+            }
+        }
+
+        const API_BASE = window.location.origin + '/api';
+
+        // Fetch users from backend and render
+        async function fetchUsers() {
+            try {
+                const res = await fetch(API_BASE + '/users');
+                const data = await res.json();
+                if (data.success) {
+                    renderUserTableFromServer(data.users);
+                } else {
+                    showNotification('Failed to load users: ' + (data.message || ''), 'error');
+                }
+            } catch (err) {
+                console.error('Error fetching users', err);
+                showNotification('Error fetching users', 'error');
+            }
+        }
+
+        // local cache
+        let users = [];
+
+        function renderUserTableFromServer(serverUsers) {
+            users = serverUsers || [];
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+            serverUsers.forEach(u => {
+                const initials = (u.username || u.email || '').split(' ').map(s => s[0] || '').join('').substring(0,2).toUpperCase();
+                const role = 'staff';
+                const status = u.is_active ? 'Active' : 'Inactive';
+                const lastActive = u.last_login || 'N/A';
+                const row = `
+                    <tr>
+                        <td><span class="user-avatar-small">${initials}</span>${u.username || u.email}</td>
+                        <td><span class="role-badge ${role}">${role.charAt(0).toUpperCase()+role.slice(1)}</span></td>
+                        <td>${u.hospital_id || '-'}</td>
+                        <td><span class="status-badge ${status.toLowerCase()}">${status}</span></td>
+                        <td>${lastActive}</td>
+                        <td>
+                            <button class="action-btn edit" onclick="editUser(${u.id})">Edit</button>
+                            <button class="action-btn delete" onclick="deleteUser(${u.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+            // Update stats if present
+            const statCards = document.querySelectorAll('.stat-card');
+            if (statCards.length >= 2) {
+                statCards[0].querySelector('.stat-value').textContent = serverUsers.length;
+                statCards[1].querySelector('.stat-value').textContent = serverUsers.filter(s => s.is_active).length;
+            }
+        }
+
+        async function addNewUser() {
+            const name = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim();
+            const role = document.getElementById('newUserRole').value;
+            const dept = document.getElementById('newUserDept').value;
+
+            if (!name || !email) {
+                showNotification('Please fill in name and email', 'error');
+                return;
+            }
+
+            // generate a temporary password
+            const tempPass = 'Temp@' + Math.random().toString(36).slice(2,8);
+
+            try {
+                const res = await fetch(API_BASE + '/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: name, email: email, password: tempPass, phone: '' })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showNotification('User added. Temporary password: ' + tempPass, 'success');
+                    // if server returned created user, insert it immediately
+                    if (data.user && data.user.id) {
+                        // prepend created user to cache and render
+                        users.unshift(data.user);
+                        renderUserTableFromServer(users);
+                        closeModal('addUserModal');
+                        addActivity('user', 'New user added: ' + name);
+                    } else {
+                        // optimistic UI: add temporary entry immediately
+                        const tempId = 'temp-' + Date.now();
+                        const tempUser = { id: tempId, username: name, email: email, is_active: 1, hospital_id: dept, last_login: 'Just now' };
+                        users.unshift(tempUser);
+                        renderUserTableFromServer(users);
+                        closeModal('addUserModal');
+                        addActivity('user', 'New user added: ' + name);
+                        // refresh from server to replace temp id with real record
+                        fetchUsers();
+                    }
+                } else {
+                    showNotification('Create user failed: ' + (data.message || ''), 'error');
+                }
+            } catch (err) {
+                console.error('Add user error', err);
+                showNotification('Error adding user', 'error');
+            }
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('Delete user id ' + userId + '?')) return;
+            try {
+                const res = await fetch(API_BASE + '/users/' + userId, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    showNotification('User deleted', 'success');
+                    addActivity('delete', 'User deleted: ' + userId);
+                    fetchUsers();
+                } else {
+                    showNotification('Delete failed: ' + (data.message || ''), 'error');
+                }
+            } catch (err) {
+                console.error('Delete error', err);
+                showNotification('Error deleting user', 'error');
+            }
+        }
+
+        // Edit user - open modal and prefill
+        let editingUserId = null;
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) { showNotification('User not found', 'error'); return; }
+            editingUserId = userId;
+            document.getElementById('editUserName').value = user.username || user.email || '';
+            document.getElementById('editUserEmail').value = user.email || '';
+            // role not available from server currently; leave selection default
+            document.getElementById('editUserRole').value = (user.role || 'staff');
+            document.getElementById('editUserStatus').value = user.is_active ? '1' : '0';
+            openModal('editUserModal');
+        }
+
+        async function submitEditUser() {
+            if (!editingUserId) { showNotification('No user selected', 'error'); return; }
+            const email = document.getElementById('editUserEmail').value.trim();
+            const role = document.getElementById('editUserRole').value;
+            const is_active = parseInt(document.getElementById('editUserStatus').value, 10);
+            try {
+                const res = await fetch(API_BASE + '/users/' + editingUserId, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, is_active: is_active })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showNotification('User updated', 'success');
+                    closeModal('editUserModal');
+                    addActivity('user', 'User updated: ' + (email || editingUserId));
+                    fetchUsers();
+                } else {
+                    showNotification('Update failed: ' + (data.message || ''), 'error');
+                }
+            } catch (err) {
+                console.error('Update error', err);
+                showNotification('Error updating user', 'error');
+            }
+        }
+
+        // Export Data - Download as JSON
+        function exportData() {
+            const data = {
+                hospitalInfo: {
+                    name: document.getElementById('hospitalName').value,
+                    id: document.getElementById('hospitalId').value,
+                    address: document.getElementById('hospitalAddress').value,
+                    phone: document.getElementById('hospitalPhone').value,
+                    email: document.getElementById('hospitalEmail').value,
+                    license: document.getElementById('hospitalLicense').value,
+                    beds: document.getElementById('hospitalBeds').value,
+                    year: document.getElementById('hospitalYear').value
+                },
+                users: users,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'medivolt_export_' + new Date().toISOString().split('T')[0] + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Data exported successfully!', 'success');
+            addActivity('export', 'Data exported to JSON file');
+        }
+
+        // Generate PDF Report
+        function generatePDFReport() {
+            const hospitalName = document.getElementById('hospitalName').value;
+            const hospitalId = document.getElementById('hospitalId').value;
+            
+            // Create a simple text-based report
+            let reportContent = `
+MEDIVOLT ENERGY MANAGEMENT SYSTEM - REPORT
+Generated: ${new Date().toLocaleString()}
+============================================
+
+HOSPITAL INFORMATION
+--------------------
+Name: ${hospitalName}
+ID: ${hospitalId}
+Address: ${document.getElementById('hospitalAddress').value}
+Phone: ${document.getElementById('hospitalPhone').value}
+Email: ${document.getElementById('hospitalEmail').value}
+License: ${document.getElementById('hospitalLicense').value}
+Beds: ${document.getElementById('hospitalBeds').value}
+
+USER SUMMARY
+------------
+Total Users: ${users.length}
+Active Users: ${users.filter(u => u.status === 'Active').length}
+Inactive Users: ${users.filter(u => u.status === 'Inactive').length}
+
+USER LIST
+---------
+`;
+            
+            users.forEach((user, index) => {
+                reportContent += `${index + 1}. ${user.name} - ${user.role} (${user.department}) - ${user.status}\n`;
+            });
+            
+            reportContent += `
+============================================
+This report was generated by MediVolt Admin Panel
+`;
+            
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'medivolt_report_' + new Date().toISOString().split('T')[0] + '.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Report downloaded successfully!', 'success');
+            addActivity('report', 'Report downloaded');
+        }
+
+        // Activity Log Functions
+        function addActivity(type, message) {
+            const activityList = document.querySelector('.activity-list');
+            const time = 'Just now';
+            
+            let icon = '📝';
+            if (type === 'user') icon = '👤';
+            if (type === 'export') icon = '📥';
+            if (type === 'report') icon = '📊';
+            if (type === 'delete') icon = '🗑️';
+            
+            const newActivity = `
+                <div class="activity-item">
+                    <div class="activity-icon" style="background: #F3E8FF;">${icon}</div>
+                    <div class="activity-content">
+                        <div class="activity-title">${message}</div>
+                        <div class="activity-time">${time}</div>
+                    </div>
+                </div>
+            `;
+            
+            activityList.insertAdjacentHTML('afterbegin', newActivity);
+        }
+
+        // Initialize - fetch and render from server
+        fetchUsers();
+        console.log('Admin Panel initialized');
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        }
+
+        // Initialize
+        console.log('Admin Panel initialized');
+    </script>
+</body>
+</html>
